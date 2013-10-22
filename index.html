@@ -50,22 +50,8 @@
                         </div>
                         <div class="row">
                                 <div class="large-5 columns" id="markets">
-                                        <div class="panel">
-                                                <p style="width:60%; float:left;">Staten Island Ferry Whitehall Terminal</p> <p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p>
-                                                <p style="clear:both;">Distance from current location: .3 mi</p>
-                                                <p>4 South Street, inside ferry terminal building, Manhattan</p>
-                                                <p>Open Tuesdays and Fridays, 8:00 am - 7:00 pm, year-round</p>
-                                                <p>Products: Maple syrup & honey, Orchard and small fruits, vegetables, cider, baked goods, jams, beef, and pork</p>
-                                                <p><a href="http://www.grownyc.org/greenmarket-site/manhattan/si-ferry-greenmarket">Website</a> | <a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p>
-                                        </div>
-                                        <div class="panel">
-                                                <p style="width:60%; float:left;">Staten Island Ferry Whitehall Terminal</p> <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p>
-                                                <p style="clear:both;">Distance from current location: .3 mi</p>
-                                                <p>4 South Street, inside ferry terminal building, Manhattan</p>
-                                                <p>Open Tuesdays and Fridays, 8:00 am - 7:00 pm, year-round</p>
-                                                <p>Products: Maple syrup & honey, Orchard and small fruits, vegetables, cider, baked goods, jams, beef, and pork</p>
-                                                <p><a href="http://www.grownyc.org/greenmarket-site/manhattan/si-ferry-greenmarket">Website</a> | <a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p>
-                                        </div>
+                                        <!-- <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p> -->
+                                        
                                 </div>
                                 <div class="large-7 columns">
                                         <div id="geo-wrapper" class="panel">
@@ -106,6 +92,7 @@
   </script>
     <script src="js/geoposition/geoPosition.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
 <script>
 var geocoder;
 var map;
@@ -123,6 +110,7 @@ function codeAddress(){
         geocoder.geocode( { 'address': sAddress}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                                  map.setCenter(results[0].geometry.location);
+                                 getResults(results[0].geometry.location.lb, results[0].geometry.location.mb);
                                  map.setZoom(14);
                                  var marker = new google.maps.Marker({map: map, position: results[0].geometry.location
 });
@@ -147,7 +135,7 @@ function show_map(loc) {
 $("#geo-wrapper").css({'width':'100%','height':'425px'});
 var map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, mapTypeControl:true, zoomControl: true, mapTypeId: google.maps.MapTypeId.ROADMAP});
 var center = new google.maps.LatLng(loc.coords.latitude,loc.coords.longitude);
-console.log(center);
+//console.log(center);
 map.setCenter(center);
 var marker = new google.maps.Marker({map: map, position: center, draggable: false, title: "You are here (more or less)"});
 getResults(center.lb, center.mb);
@@ -163,35 +151,55 @@ $("#geo-wrapper").html(supports(false, "geolocation"));
 }
 });
 
+function addMarker(location, title) {
+	marker = new google.maps.Marker({
+	position: location,
+	map: map,
+	title: title
+	});
+}
+
 function getResults(lat, lng){
-    $.ajax({
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        // submit a get request to the restful service zipSearch or locSearch.
-        url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat=" + lat + "&lng=" + lng,
-        dataType: 'jsonp',
-        success: function(data) {
-			searchResultsHandler(data);
-		},
-		error : function(err, req) {
-			console.log("Your browser broke!");
-		}
-    });
-}
-//iterate through the JSON result object.
-function searchResultsHandler(searchResults) {
-	console.log(searchResults);
-    for (var key in searchResults) {
-        console.log(key);
-        var results = searchResults[key];
-        for (var i = 0; i < results.length; i++) {
-            var result = results[i];
-            for (var key in result) {
-                console.log(result[key]);
-            }
-        }
-    }
-}
+ 
+ var url = "http://data.ny.gov/resource/n6w2-gz88.json?$where=within_circle(location_points, " + lat + "," + lng + ", 1610)"
+ 
+ $.get( url, function( data ) {
+ 	//console.log( data );
+ 	for(var i = 0; i < data.length; i++) {
+ 		var current = data[i];
+ 		console.log(current);
+ 		var panel =  $('<div class="panel" id="' + current.market_name + '"><p style="width:60%; float:left;">' + current.market_name + '</p> <p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>' + current.location + '</p><p>Open ' + current.operation_hours + " " + current.operation_season + '</p><p>Products: Products </p><p><a href="http://www.grownyc.org/greenmarket-site/manhattan/si-ferry-greenmarket">Website</a> | <a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p></div>');
+ 		$("#markets").append(panel);
+ 		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
+ 		var newMarkerTitle = current.market_name;
+ 		addMarker(newMarker);
+ 		}
+ });
+ 
+ } 
+ 
+// function getDetails(id) {
+//     $.ajax({
+//         type: "GET",
+//         contentType: "application/json; charset=utf-8",
+//         // submit a get request to the restful service mktDetail.
+//         url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=" + id,
+//         dataType: 'jsonp',
+//         success: function(data) {
+// 			detailResultsHandler(data, id);
+// 		},
+// 		error : function(err, req) {
+// 			console.log("Your browser broke!");
+// 		}    });
+// }
+// //iterate through the JSON result object.
+// function detailResultsHandler(detailresults, id) {
+//     for (var key in detailresults) {
+//         //console.log(key);
+//         var results = detailresults[key];
+//         //console.log(results);
+//     }
+
 </script>
 
 </body>
