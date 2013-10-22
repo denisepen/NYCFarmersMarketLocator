@@ -49,7 +49,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="large-5 columns">
+				<div class="large-5 columns" id="markets">
 					<div class="panel">
 						<p style="width:60%; float:left;">Staten Island Ferry Whitehall Terminal</p>  <p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p>
 						<p style="clear:both;">Distance from current location: .3 mi</p>
@@ -164,8 +164,10 @@ function show_map(loc) {
 $("#geo-wrapper").css({'width':'100%','height':'425px'});
 var map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, mapTypeControl:true, zoomControl: true, mapTypeId: google.maps.MapTypeId.ROADMAP});
 var center = new google.maps.LatLng(loc.coords.latitude,loc.coords.longitude);
+console.log(center);
 map.setCenter(center);
 var marker = new google.maps.Marker({map: map, position: center, draggable: false, title: "You are here (more or less)"});
+getResults(center.lb, center.mb);
 }
 function show_map_error() {
 $("#geo-wrapper").html('Unable to determine your location.');
@@ -177,6 +179,30 @@ if (geoPosition.init()) {
 $("#geo-wrapper").html(supports(false, "geolocation"));
 }
 });
+
+function getResults(lat, lng){
+    $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        // submit a get request to the restful service zipSearch or locSearch.
+        url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat=" + lat + "&lng=" + lng,
+        dataType: 'jsonp',
+        jsonpCallback: 'searchResultsHandler'
+    });
+}
+//iterate through the JSON result object.
+function searchResultsHandler(searchResults) {
+    for (var key in searchResults) {
+        console.log(key);
+        var results = searchResults[key];
+        for (var i = 0; i < results.length; i++) {
+            var result = results[i];
+            for (var key in result) {                
+                console.log(result[key]);
+            }
+        }
+    }
+}
 </script>
 
 </body>
