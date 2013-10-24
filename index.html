@@ -12,7 +12,9 @@
   
 
   <script src="js/vendor/custom.modernizr.js"></script>
-
+<style>
+#geo-wrapper img { max-width:none; }
+</style>
 </head>
 <body onload="initialize();">
 
@@ -90,10 +92,13 @@
   <script>
     $(document).foundation();
   </script>
-    <script src="js/geoposition/geoPosition.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript"
+ src="js/geoposition/geoPosition.js"></script>
+    <script type="text/javascript"
+src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyAufQG3-_yBGqDKE7dTf53zpqkhUKC8tao&sensor=true"></script>
 
 <script>
+google.maps.visualRefresh = true;
 var geocoder;
 var map;
 function initialize() {
@@ -105,12 +110,13 @@ function initialize() {
         }
         
 function codeAddress(){
-    map = new google.maps.Map(document.getElementById("geo-wrapper"), initialize.myOptions);
+        var myOptions = {MapTypeId:google.maps.MapTypeId.ROADMAP};
+    map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
         var sAddress = document.getElementById("inputTextAddress").value;
         geocoder.geocode( { 'address': sAddress}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                                  map.setCenter(results[0].geometry.location);
-                                 getResults(results[0].geometry.location.lb, results[0].geometry.location.mb);
+                                 getResults(results[0].geometry.location.mb, results[0].geometry.location.nb);
                                  map.setZoom(14);
                                  var marker = new google.maps.Marker({map: map, position: results[0].geometry.location
 });
@@ -133,12 +139,12 @@ geoPosition.getCurrentPosition(show_map, show_map_error);
 }
 function show_map(loc) {
 $("#geo-wrapper").css({'width':'100%','height':'425px'});
-var map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, mapTypeControl:true, zoomControl: true, mapTypeId: google.maps.MapTypeId.ROADMAP});
+map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, mapTypeControl:true, zoomControl: true, mapTypeId: google.maps.MapTypeId.ROADMAP});
 var center = new google.maps.LatLng(loc.coords.latitude,loc.coords.longitude);
 //console.log(center);
 map.setCenter(center);
 var marker = new google.maps.Marker({map: map, position: center, draggable: false, title: "You are here (more or less)"});
-getResults(center.lb, center.mb);
+getResults(center.mb, center.nb);
 }
 function show_map_error() {
 $("#geo-wrapper").html('Unable to determine your location.');
@@ -151,11 +157,11 @@ $("#geo-wrapper").html(supports(false, "geolocation"));
 }
 });
 
-function addMarker(location, title) {
-	marker = new google.maps.Marker({
-	position: location,
+function addMarker(location, marketName) {
+	var marker = new google.maps.Marker({
 	map: map,
-	title: title
+	position: location,
+	title: marketName
 	});
 }
 
@@ -165,18 +171,51 @@ function getResults(lat, lng){
  
  $.get( url, function( data ) {
  	//console.log( data );
+ 	$("#markets").empty();
  	for(var i = 0; i < data.length; i++) {
  		var current = data[i];
- 		console.log(current);
+ 		//console.log(current);
  		var panel =  $('<div class="panel" id="' + current.market_name + '"><p style="width:60%; float:left;">' + current.market_name + '</p> <p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>' + current.location + '</p><p>Open ' + current.operation_hours + " " + current.operation_season + '</p><p>Products: Products </p><p><a href="http://www.grownyc.org/greenmarket-site/manhattan/si-ferry-greenmarket">Website</a> | <a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p></div>');
  		$("#markets").append(panel);
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
- 		addMarker(newMarker);
+ 		addMarker(newMarker, newMarkerTitle);
+ 		getUSDAResults(parseFloat(current.latitude), parseFloat(current.longitude));
  		}
  });
  
  } 
+ 
+function getUSDAResults(lat, lng) {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        // submit a get request to the restful service mktDetail.
+        url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat=" + lat + "&lng=" + lng,
+        dataType: 'jsonp',
+        success: function(data) {
+			searchResultsHandler(data);
+		},
+		error : function(err, req) {
+			console.log("Your browser broke!");
+		}    });
+}
+//iterate through the JSON result object.
+function searchResultsHandler(searchresults) {
+    for (var key in searchresults) {
+        //console.log(key);
+        var results = searchresults[key];
+        for (var i = 0; i < results.length; i++) {
+            var result = results[i];
+            for (var key in result) {
+                //only do an alert on the first search result
+                if (i == 0) {
+                    console.log(result.id);
+                }
+            }
+        }
+    }
+}
  
 // function getDetails(id) {
 //     $.ajax({
@@ -199,6 +238,7 @@ function getResults(lat, lng){
 //         var results = detailresults[key];
 //         //console.log(results);
 //     }
+
 
 </script>
 
