@@ -26,10 +26,12 @@
         </div>
         
         
-        <form>
+
   <div class="row">
     <div class="large-7 columns">
+            <form onsubmit="codeAddress();return false">
                 <input type="text" id="inputTextAddress" placeholder="Address or Zip Code">
+                        </form>
     </div>
         <div class="large-1 columns">
                 <a href="#" onclick="codeAddress();return false" class="button prefix"><i class="foundicon-search"></i></a>
@@ -41,7 +43,7 @@
                 <a href="#" onclick="lookup_location();return false" class="small button" style="width:100%;">Nearby</a>
         </div>
         </div>
-        </form>
+
                         <!-- Grid Example -->
                         <div class="row">
                                 <div class="large-12 columns">
@@ -101,6 +103,7 @@ src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyAufQG3-_yBGqDKE7dTf53z
 google.maps.visualRefresh = true;
 var geocoder;
 var map;
+
 function initialize() {
         geocoder = new google.maps.Geocoder();
         var latlng = new google.maps.LatLng(40.6700, -73.9400);
@@ -125,6 +128,9 @@ function codeAddress(){
                         }
         });                
 }
+
+
+    
 function supports(bool, suffix) {
 var s = "Your browser ";
 if (bool) {
@@ -161,6 +167,7 @@ function addMarker(location, marketName) {
 	var marker = new google.maps.Marker({
 	map: map,
 	position: location,
+	icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
 	title: marketName
 	});
 }
@@ -181,6 +188,10 @@ function getResults(lat, lng){
  		var newMarkerTitle = current.market_name;
  		addMarker(newMarker, newMarkerTitle);
  		getUSDAResults(parseFloat(current.latitude), parseFloat(current.longitude));
+ 		}
+ 	if(data.length === 0) {
+ 	var emptyPanel =  $('<div class="panel" id="noMarkets"><p>This app only supports searches within New York City. Please try again!</p></div>');
+ 		$("#markets").append(emptyPanel);
  		}
  });
  
