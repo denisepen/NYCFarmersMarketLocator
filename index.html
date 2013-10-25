@@ -5,7 +5,7 @@
 <head>
         <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Find a Farmers' Market in New York City</title>
+  <title>Find a Farmers Market Near You in New York City</title>
 
   
   <link rel="stylesheet" href="css/foundation.css">
@@ -20,7 +20,7 @@
 
         <div class="row">
                 <div class="large-12 columns">
-                        <h1>Find a Farmers' Market in New York City</h1>
+                        <h1>Find a Farmers Market Near You in New York City</h1>
                         <hr />
                 </div>
         </div>
@@ -48,19 +48,21 @@
                         <div class="row">
                                 <div class="large-12 columns">
                                         <div class="panel">
-                                                <h4>Farmers' Markets near Long Island City, New York City, Queens County, New York, 11104</h4>
+                                                <h4>Farmers Markets near <span id="location"></span></h4>
                                         </div>
                                 </div>
                         </div>
                         <div class="row">
                                 <div class="large-5 columns" id="markets">
-                                        <!-- <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p> -->
+                                        <!-- <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p><p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>Products: Products</p><p><a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p> -->
                                         
                                 </div>
                                 <div class="large-7 columns">
-                                        <div id="geo-wrapper" class="panel">
+									<div style="width:43.5%; position:fixed;">
+                                        <div id="geo-wrapper" style="height:425px;"  class="panel">
 
                                         </div>
+									</div>
                                 </div>
                         </div>
         
@@ -109,7 +111,6 @@ function initialize() {
         var latlng = new google.maps.LatLng(40.6700, -73.9400);
         var myOptions = {zoom:10,center:latlng, MapTypeId:google.maps.MapTypeId.ROADMAP};
         map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
-        $("#geo-wrapper").css({'width':'100%','height':'425px'});
         }
         
 function codeAddress(){
@@ -119,9 +120,10 @@ function codeAddress(){
         geocoder.geocode( { 'address': sAddress}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                                  map.setCenter(results[0].geometry.location);
+								 codeLatLng(results[0].geometry.location.mb, results[0].geometry.location.nb);
                                  getResults(results[0].geometry.location.mb, results[0].geometry.location.nb);
                                  map.setZoom(14);
-                                 var marker = new google.maps.Marker({map: map, position: results[0].geometry.location
+                                 var marker = new google.maps.Marker({map: map, title: "You are here (more or less)", position: results[0].geometry.location
 });
 } else {
         alert("Geocode was not successful for the following reason: " + status);
@@ -129,8 +131,6 @@ function codeAddress(){
         });                
 }
 
-
-    
 function supports(bool, suffix) {
 var s = "Your browser ";
 if (bool) {
@@ -144,12 +144,12 @@ function lookup_location() {
 geoPosition.getCurrentPosition(show_map, show_map_error);
 }
 function show_map(loc) {
-$("#geo-wrapper").css({'width':'100%','height':'425px'});
 map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, mapTypeControl:true, zoomControl: true, mapTypeId: google.maps.MapTypeId.ROADMAP});
 var center = new google.maps.LatLng(loc.coords.latitude,loc.coords.longitude);
 //console.log(center);
 map.setCenter(center);
 var marker = new google.maps.Marker({map: map, position: center, draggable: false, title: "You are here (more or less)"});
+codeLatLng(center.mb, center.nb);
 getResults(center.mb, center.nb);
 }
 function show_map_error() {
@@ -162,6 +162,22 @@ if (geoPosition.init()) {
 $("#geo-wrapper").html(supports(false, "geolocation"));
 }
 });
+
+
+function codeLatLng(lat, lng) {
+  var latlng = new google.maps.LatLng(lat, lng);
+  geocoder.geocode({'latLng': latlng}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results[1]) {
+        $("#location").text(results[1].formatted_address);
+      } else {
+        alert('No results found');
+      }
+    } else {
+      alert('Geocoder failed due to: ' + status);
+    }
+  });
+}
 
 function addMarker(location, marketName) {
 	var marker = new google.maps.Marker({
@@ -182,7 +198,13 @@ function getResults(lat, lng){
  	for(var i = 0; i < data.length; i++) {
  		var current = data[i];
  		//console.log(current);
- 		var panel =  $('<div class="panel" id="' + current.market_name + '"><p style="width:60%; float:left;">' + current.market_name + '</p> <p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>' + current.location + '</p><p>Open ' + current.operation_hours + " " + current.operation_season + '</p><p>Products: Products </p><p><a href="http://www.grownyc.org/greenmarket-site/manhattan/si-ferry-greenmarket">Website</a> | <a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p></div>');
+		if (current.market_link != "") {
+			var website = "<p><a href=" + current.market_link + ">Website</a></p>";
+		} else {
+			website = '';
+			}
+			
+ 		var panel =  $('<div class="panel" id="' + current.market_name + '"><p>' + current.market_name + '</p> <p>' + current.location + '</p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
  		$("#markets").append(panel);
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
@@ -190,7 +212,7 @@ function getResults(lat, lng){
  		getUSDAResults(parseFloat(current.latitude), parseFloat(current.longitude));
  		}
  	if(data.length === 0) {
- 	var emptyPanel =  $('<div class="panel" id="noMarkets"><p>This app only supports searches within New York City. Please try again!</p></div>');
+ 	var emptyPanel =  $('<div class="panel" id="noMarkets"><p>Oops! I couldn\'t find a farmers market within 1 mile of your location. This app only supports searches within New York City. Please try again!</p></div>');
  		$("#markets").append(emptyPanel);
  		}
  });
