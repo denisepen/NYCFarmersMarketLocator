@@ -14,6 +14,20 @@
   <script src="js/vendor/custom.modernizr.js"></script>
 <style>
 #geo-wrapper img { max-width:none; }
+
+@media all and (max-width: 980px) {
+      #fixit {
+        position:relative;
+      }
+   }
+   
+   @media all and (min-width: 980px) {
+      #fixit {
+        position:fixed;
+		max-width:553px;
+      }
+   }
+
 </style>
 </head>
 <body onload="initialize();">
@@ -58,8 +72,8 @@
                                         
                                 </div>
                                 <div class="large-7 columns">
-									<div style="width:43.5%; position:fixed;">
-                                        <div id="geo-wrapper" style="height:425px;"  class="panel">
+									<div id="fixit" style="width:100%;">
+                                        <div id="geo-wrapper" style="height:425px; width:100%;"  class="panel">
 
                                         </div>
 									</div>
