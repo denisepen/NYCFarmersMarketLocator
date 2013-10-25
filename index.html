@@ -218,27 +218,8 @@ function getResults(lat, lng){
 		} else {
 			website = '';
 			}
-		if (navigator.userAgent.match(/android/gi)) {
-
-//var maplink = '"geo:' + parseFloat(current.latitude) + ',' + parseFloat(current.longitude) + '"';
-var maplink = encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "");
-
-} else if (navigator.userAgent.match(/Windows Phone/i)) {
-
-var maplink = '"maps:' + current.location + '"';
-
-} else if (((navigator.userAgent.indexOf("BlackBerry") >= 0) || (navigator.userAgent.indexOf("BB10") >= 0))) {
-blackberry.location.refreshLocation();
-
-var maplink = '"javascript:blackberry.launch.newMap({' + parseFloat(current.latitude) + ',' + parseFloat(current.longitude) + '});"';
-
-} else {
-
-var maplink = encodeURI("http://maps.google.com?q=" + current.location + "");
-
-}
 		
- 		var panel =  $('<div class="panel" id="' + current.market_name + '"><p>' + current.market_name + '</p> <p>' + current.location + ' <a style="text-decoration:none;" href=' + maplink + '>Map</a></p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
+ 		var panel =  $('<div class="panel" id="' + current.market_name + '"><p>' + current.market_name + '</p> <p>' + current.location + ' <a style="text-decoration:none;" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a></p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
  		$("#markets").append(panel);
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
