@@ -15,6 +15,7 @@
 <style>
 #geo-wrapper img { max-width:none; }
 
+
 @media all and (max-width: 980px) {
       #fixit {
         position:relative;
@@ -69,17 +70,19 @@
                         <div class="row">
                                 <div class="large-5 columns" id="markets">
                                         <!-- <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p><p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>Products: Products</p><p><a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p> -->
-                                        
+
+
                                 </div>
                                 <div class="large-7 columns">
 									<div id="fixit" style="width:100%;">
-                                        <div id="geo-wrapper" style="height:425px; width:100%;"  class="panel">
-
-                                        </div>
+                                        <div id="geo-wrapper" style="height:425px; width:100%;" class="panel"></div>
+                                        									<hr/ >
+												<p>Farmers Market data from <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="https://data.ny.gov">State of New York Open Data</a>.</p>
+			<p>Design and development by Megan Taylor. &copy; 2013 Megan Taylor</p>
 									</div>
+
                                 </div>
                         </div>
-        
 
   <script>
   document.write('<script src=' +
@@ -128,7 +131,7 @@ function initialize() {
         }
         
 function codeAddress(){
-        var myOptions = {MapTypeId:google.maps.MapTypeId.ROADMAP};
+        var myOptions = {scrollwheel: false, MapTypeId:google.maps.MapTypeId.ROADMAP};
     map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
         var sAddress = document.getElementById("inputTextAddress").value;
         geocoder.geocode( { 'address': sAddress}, function(results, status) {
@@ -158,7 +161,7 @@ function lookup_location() {
 geoPosition.getCurrentPosition(show_map, show_map_error);
 }
 function show_map(loc) {
-map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, mapTypeControl:true, zoomControl: true, mapTypeId: google.maps.MapTypeId.ROADMAP});
+map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, mapTypeControl:true, zoomControl: true, scrollwheel: false, mapTypeId: google.maps.MapTypeId.ROADMAP});
 var center = new google.maps.LatLng(loc.coords.latitude,loc.coords.longitude);
 //console.log(center);
 map.setCenter(center);
@@ -193,7 +196,7 @@ function codeLatLng(lat, lng) {
   });
 }
 
-function addMarker(location, marketName) {
+function addMarker(location, marketName, panelID) {
 	var marker = new google.maps.Marker({
 	map: map,
 	position: location,
@@ -201,7 +204,24 @@ function addMarker(location, marketName) {
 	icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
 	title: marketName
 	});
+	var infowindow = new google.maps.InfoWindow({
+    content: "<p>" + marketName + "</p>"
+  	});
+  	google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map,marker);
+    selectMarket(panelID);
+  });
 }
+
+function selectMarket(panelID) {
+	//console.log('#'+ panelID + '');
+	$('#'+ panelID + '').css("background-color", "#BABCBE");
+	$('#'+ panelID + '').attr( 'name', 'foo' );
+	$('html,body').animate({scrollTop: div[name='foo'].offset().top},'slow');
+	$('#'+ panelID + '').attr( 'name', '' );
+}
+
+
 
 function getResults(lat, lng){
  
@@ -218,12 +238,12 @@ function getResults(lat, lng){
 		} else {
 			website = '';
 			}
-		
- 		var panel =  $('<div class="panel" id="' + current.market_name + '"><p>' + current.market_name + '</p> <p>' + current.location + ' <a style="text-decoration:none;" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a></p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
+	    var panelID = current.market_name.replace(/\s+/g, '');
+ 		var panel =  $('<div class="panel" id="' + panelID + '"><p>' + current.market_name + '</p> <p>' + current.location + ' <a style="text-decoration:none;" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a></p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
  		$("#markets").append(panel);
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
- 		addMarker(newMarker, newMarkerTitle);
+ 		addMarker(newMarker, newMarkerTitle, panelID);
  		//getUSDAResults(parseFloat(current.latitude), parseFloat(current.longitude));
  		}
  	if(data.length === 0) {
