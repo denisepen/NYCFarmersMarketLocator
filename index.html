@@ -220,7 +220,7 @@ function getResults(lat, lng){
 			}
 		if (navigator.userAgent.match(/android/gi)) {
 
-var maplink = '"geo:' + current.location + '"';
+var maplink = '"geo:' + parseFloat(current.latitude) + ',' + parseFloat(current.longitude) + '"';
 
 } else if (navigator.userAgent.match(/Windows Phone/i)) {
 
