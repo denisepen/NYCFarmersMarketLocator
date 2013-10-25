@@ -123,7 +123,7 @@ var map;
 function initialize() {
         geocoder = new google.maps.Geocoder();
         var latlng = new google.maps.LatLng(40.6700, -73.9400);
-        var myOptions = {zoom:10,center:latlng, MapTypeId:google.maps.MapTypeId.ROADMAP};
+        var myOptions = {zoom:10,center:latlng, scrollwheel: false, MapTypeId:google.maps.MapTypeId.ROADMAP};
         map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
         }
         
@@ -137,7 +137,7 @@ function codeAddress(){
 								 codeLatLng(results[0].geometry.location.mb, results[0].geometry.location.nb);
                                  getResults(results[0].geometry.location.mb, results[0].geometry.location.nb);
                                  map.setZoom(14);
-                                 var marker = new google.maps.Marker({map: map, title: "You are here (more or less)", position: results[0].geometry.location
+                                 var marker = new google.maps.Marker({map: map, scrollwheel: false, title: "You are here (more or less)", position: results[0].geometry.location
 });
 } else {
         alert("Geocode was not successful for the following reason: " + status);
@@ -162,7 +162,7 @@ map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, map
 var center = new google.maps.LatLng(loc.coords.latitude,loc.coords.longitude);
 //console.log(center);
 map.setCenter(center);
-var marker = new google.maps.Marker({map: map, position: center, draggable: false, title: "You are here (more or less)"});
+var marker = new google.maps.Marker({map: map, position: center, scrollwheel: false, draggable: false, title: "You are here (more or less)"});
 codeLatLng(center.mb, center.nb);
 getResults(center.mb, center.nb);
 }
@@ -197,6 +197,7 @@ function addMarker(location, marketName) {
 	var marker = new google.maps.Marker({
 	map: map,
 	position: location,
+	scrollwheel: false,
 	icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
 	title: marketName
 	});
@@ -217,7 +218,26 @@ function getResults(lat, lng){
 		} else {
 			website = '';
 			}
- 		var panel =  $('<div class="panel" id="' + current.market_name + '"><p>' + current.market_name + '</p> <p>' + current.location + '</p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
+		if (navigator.userAgent.match(/android/gi)) {
+
+var maplink = '"geo:' + current.location + '"';
+
+} else if (navigator.userAgent.match(/Windows Phone/i)) {
+
+var maplink = '"maps:' + current.location + '"';
+
+} else if (((navigator.userAgent.indexOf("BlackBerry") >= 0) || (navigator.userAgent.indexOf("BB10") >= 0))) {
+blackberry.location.refreshLocation();
+
+var maplink = '"javascript:blackberry.launch.newMap({' + parseFloat(current.latitude) + ',' + parseFloat(current.longitude) + '});"';
+
+} else {
+
+var maplink = '"http://maps.google.com?q=' + current.location + '"';
+
+}
+		
+ 		var panel =  $('<div class="panel" id="' + current.market_name + '"><p>' + current.market_name + '</p> <p>' + current.location + ' <a style="text-decoration:none;" href=' + maplink + '>Map</a></p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
  		$("#markets").append(panel);
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
