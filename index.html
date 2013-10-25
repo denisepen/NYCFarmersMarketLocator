@@ -15,6 +15,19 @@
 <style>
 #geo-wrapper img { max-width:none; }
 
+.page-wrap {
+  min-height: 100%;
+  /* equal to footer height */
+  margin-bottom: -142px; 
+}
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+.footer, .page-wrap:after {
+  /* .push must be the same height as footer */
+  height: 142px; 
+}
 
 @media all and (max-width: 980px) {
       #fixit {
@@ -32,7 +45,8 @@
 </style>
 </head>
 <body onload="initialize();">
-
+        <div class="row page-wrap">
+                <div class="large-12 columns">
         <div class="row">
                 <div class="large-12 columns">
                         <h1>Find a Farmers Market Near You in New York City</h1>
@@ -68,22 +82,37 @@
                                 </div>
                         </div>
                         <div class="row">
-                                <div class="large-5 columns" id="markets">
+                                <div class="large-5 columns">
                                         <!-- <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p><p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>Products: Products</p><p><a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p> -->
-
-
+                                        <div id="markets">
+                                        </div>
                                 </div>
-                                <div class="large-7 columns">
-									<div id="fixit" style="width:100%;">
+                                <div class="large-7 columns" style="height:425px;">
+									<div id="fixit" style="width:100%; height:425px;">
                                         <div id="geo-wrapper" style="height:425px; width:100%;" class="panel"></div>
-                                        									<hr/ >
-												<p>Farmers Market data from <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="https://data.ny.gov">State of New York Open Data</a>.</p>
-			<p>Design and development by Megan Taylor. &copy; 2013 Megan Taylor</p>
+					
 									</div>
 
                                 </div>
-                        </div>
 
+                        </div>
+                
+                
+                        <div class="row">
+                <div class="large-12 columns">
+&nbsp;		
+                </div>
+        </div>
+    </div>
+    </div>            
+        <div class="row footer">
+                <div class="large-12 columns">
+<hr/ >
+												<p>Farmers Market data from <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="https://data.ny.gov">State of New York Open Data</a>.</p>
+			<p>Design and development by Megan Taylor. &copy; 2013 Megan Taylor</p>			
+                </div>
+        </div>
+                                                                        	
   <script>
   document.write('<script src=' +
   ('__proto__' in {} ? 'js/vendor/zepto' : 'js/vendor/jquery') +
@@ -208,6 +237,7 @@ function addMarker(location, marketName, panelID) {
     content: "<p>" + marketName + "</p>"
   	});
   	google.maps.event.addListener(marker, 'click', function() {
+  	$('.panel').css("background-color", "#F2F2F2");
     infowindow.open(map,marker);
     selectMarket(panelID);
   });
@@ -216,12 +246,11 @@ function addMarker(location, marketName, panelID) {
 function selectMarket(panelID) {
 	//console.log('#'+ panelID + '');
 	$('#'+ panelID + '').css("background-color", "#BABCBE");
-	$('#'+ panelID + '').attr( 'name', 'foo' );
-	$('html,body').animate({scrollTop: div[name='foo'].offset().top},'slow');
-	$('#'+ panelID + '').attr( 'name', '' );
+	//$('#'+ panelID + '').attr( 'name', 'foo' );
+	//$('html,body').animate({scrollTop: div[name='foo'].offset().top},'slow');
+	window.location = '#'+ panelID + '';
+	//$('#'+ panelID + '').attr( 'name', '' );
 }
-
-
 
 function getResults(lat, lng){
  
@@ -239,7 +268,7 @@ function getResults(lat, lng){
 			website = '';
 			}
 	    var panelID = current.market_name.replace(/\s+/g, '');
- 		var panel =  $('<div class="panel" id="' + panelID + '"><p>' + current.market_name + '</p> <p>' + current.location + ' <a style="text-decoration:none;" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a></p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
+ 		var panel =  $('<div class="panel" id="' + panelID + '"><a id="' + panelID + '"></a><p>' + current.market_name + '</p> <p>' + current.location + '<br /> <a style="text-decoration:none;" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a></p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
  		$("#markets").append(panel);
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
