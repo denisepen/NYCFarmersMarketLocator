@@ -221,7 +221,7 @@ function getResults(lat, lng){
 		if (navigator.userAgent.match(/android/gi)) {
 
 //var maplink = '"geo:' + parseFloat(current.latitude) + ',' + parseFloat(current.longitude) + '"';
-var maplink = encodeURI("http://maps.google.com?q=" + current.location + "");
+var maplink = encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "");
 
 } else if (navigator.userAgent.match(/Windows Phone/i)) {
 
