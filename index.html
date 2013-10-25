@@ -151,6 +151,7 @@ src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyAufQG3-_yBGqDKE7dTf53z
 google.maps.visualRefresh = true;
 var geocoder;
 var map;
+var infowindow;
 
 function initialize() {
         geocoder = new google.maps.Geocoder();
@@ -233,19 +234,16 @@ function addMarker(location, marketName, panelID) {
 	icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
 	title: marketName
 	});
-	var infowindow = new google.maps.InfoWindow({
+  	google.maps.event.addListener(marker, 'click', function() {
+	if (infowindow) infowindow.close();
+	infowindow = new google.maps.InfoWindow({
     content: "<p>" + marketName + "</p>"
   	});
-  	google.maps.event.addListener(marker, 'click', function() {
   	$('.panel').css("background-color", "#F2F2F2");
-    infowindow.open(map,marker);
-	    google.maps.event.addListener(map, 'click', function() {
-        infoWindow.close();
-    });
+	infowindow.open(map, marker);  
     selectMarket(panelID);
   });
 }
-
 
 function selectMarket(panelID) {
 	//console.log('#'+ panelID + '');
