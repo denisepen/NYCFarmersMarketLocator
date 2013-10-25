@@ -243,6 +243,10 @@ function addMarker(location, marketName, panelID) {
   });
 }
 
+google.maps.event.addListener(map, 'click', function() {
+	infoWindow.close();
+	});
+
 function selectMarket(panelID) {
 	//console.log('#'+ panelID + '');
 	$('#'+ panelID + '').css("background-color", "#BABCBE");
