@@ -243,9 +243,11 @@ function addMarker(location, marketName, panelID) {
   });
 }
 
-google.maps.event.addListener(map, 'click', function() {
-	infoWindow.close();
-	});
+closeInfoWindow = function() {
+    infoWindow.close();
+};
+
+google.maps.event.addListener(map, 'click', closeInfoWindow);
 
 function selectMarket(panelID) {
 	//console.log('#'+ panelID + '');
