@@ -223,7 +223,7 @@ function getResults(lat, lng){
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
  		addMarker(newMarker, newMarkerTitle);
- 		getUSDAResults(parseFloat(current.latitude), parseFloat(current.longitude));
+ 		//getUSDAResults(parseFloat(current.latitude), parseFloat(current.longitude));
  		}
  	if(data.length === 0) {
  	var emptyPanel =  $('<div class="panel" id="noMarkets"><p>Oops! I couldn\'t find a farmers market within 1 mile of your location. This app only supports searches within New York City. Please try again!</p></div>');
@@ -232,7 +232,7 @@ function getResults(lat, lng){
  });
  
  } 
- 
+/* 
 function getUSDAResults(lat, lng) {
     $.ajax({
         type: "GET",
@@ -263,29 +263,29 @@ function searchResultsHandler(searchresults) {
         }
     }
 }
- 
-// function getDetails(id) {
-//     $.ajax({
-//         type: "GET",
-//         contentType: "application/json; charset=utf-8",
-//         // submit a get request to the restful service mktDetail.
-//         url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=" + id,
-//         dataType: 'jsonp',
-//         success: function(data) {
-// 			detailResultsHandler(data, id);
-// 		},
-// 		error : function(err, req) {
-// 			console.log("Your browser broke!");
-// 		}    });
-// }
-// //iterate through the JSON result object.
-// function detailResultsHandler(detailresults, id) {
-//     for (var key in detailresults) {
-//         //console.log(key);
-//         var results = detailresults[key];
-//         //console.log(results);
-//     }
-
+*/ 
+/* function getDetails(id) {
+     $.ajax({
+         type: "GET",
+         contentType: "application/json; charset=utf-8",
+         // submit a get request to the restful service mktDetail.
+         url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=" + id,
+         dataType: 'jsonp',
+         success: function(data) {
+ 			detailResultsHandler(data, id);
+ 		},
+ 		error : function(err, req) {
+ 			console.log("Your browser broke!");
+ 		}    });
+ }
+ //iterate through the JSON result object.
+ function detailResultsHandler(detailresults, id) {
+     for (var key in detailresults) {
+         //console.log(key);
+         var results = detailresults[key];
+         //console.log(results);
+     }
+*/
 
 </script>
 
