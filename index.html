@@ -248,7 +248,7 @@ function addMarker(location, marketName, panelID) {
   	google.maps.event.addListener(marker, 'click', function() {
 	if (infowindow) infowindow.close();
 	infowindow = new google.maps.InfoWindow({
-    content: "<p>" + marketName + "</p>"
+    content: "<p style='margin:0px;padding:0px;'>" + marketName + "</p>"
   	});
   	$('.panel').css("background-color", "#F2F2F2");
 	infowindow.open(map, marker);  
@@ -258,7 +258,7 @@ function addMarker(location, marketName, panelID) {
 
 function selectMarket(panelID) {
 	//console.log('#'+ panelID + '');
-	$('#'+ panelID + '').css("background-color", "#BABCBE");
+	$('#'+ panelID + '').css("background-color", "#C5E3BF");
 	//$('#'+ panelID + '').attr( 'name', 'foo' );
 	//$('html,body').animate({scrollTop: div[name='foo'].offset().top},'slow');
 	window.location = '#'+ panelID + '';
@@ -276,12 +276,12 @@ function getResults(lat, lng){
  		var current = data[i];
  		//console.log(current);
 		if (current.market_link.url != "") {
-			var website = "<p><a target='_blank' href=" + current.market_link.url + ">Website</a></p>";
+			var website = "<a target='_blank' href=" + current.market_link.url + ">Website</a>";
 		} else {
 			website = '';
 			}
 	    var panelID = current.market_name.replace(/\s+/g, '');
- 		var panel =  $('<div class="panel" id="' + panelID + '"><a id="' + panelID + '"></a><p>' + current.market_name + '</p> <p>' + current.location + '<br /> <a style="text-decoration:none;" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a></p><p>Open ' + current.operation_hours + "<br />" + current.operation_season + '</p>' + website + '</div>');
+ 		var panel =  $('<div class="panel" id="' + panelID + '"><h5>' + current.market_name + '</h5> <p>' + current.location + '<br /> <a style="text-decoration:none;" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a><br /> Open ' + current.operation_hours + "<br />" + current.operation_season + '<br /> ' + website + '</div>');
  		$("#markets").append(panel);
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
