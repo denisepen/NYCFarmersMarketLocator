@@ -281,7 +281,7 @@ function getResults(lat, lng){
 			website = '';
 			}
 	    var panelID = current.market_name.replace(/\s+/g, '');
- 		var panel =  $('<div class="panel" id="' + panelID + '"><h5>' + current.market_name + '</h5> <p>' + current.location + '<br /> <a target='_blank' href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a><br /> Open ' + current.operation_hours + "<br />" + current.operation_season + '<br /> ' + website + '</div>');
+ 		var panel =  $('<div class="panel" id="' + panelID + '"><h5>' + current.market_name + '</h5> <p>' + current.location + '<br /> <a target="_blank" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a><br /> Open ' + current.operation_hours + "<br />" + current.operation_season + '<br /> ' + website + '</div>');
  		$("#markets").append(panel);
  		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
  		var newMarkerTitle = current.market_name;
