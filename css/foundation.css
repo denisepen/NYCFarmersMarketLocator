@@ -1054,11 +1054,11 @@ td {
 
 /* Default Link Styles */
 a {
-  color: #2ba6cb;
+  color: #597368;
   text-decoration: none;
   line-height: inherit; }
   a:hover, a:focus {
-    color: #2795b6; }
+    color: #597368; }
   a img {
     border: none; }
 
@@ -1240,7 +1240,7 @@ blockquote p {
     line-height: 1.4; }
 
   h1 {
-    font-size: 2.75em; }
+    font-size: 2.56em; }
 
   h2 {
     font-size: 2.3125em; }
@@ -1339,9 +1339,9 @@ button, .button {
   padding-bottom: 0.8125em;
   padding-left: 1.5em;
   font-size: 1em;
-  background-color: #ecf0f1;
-  border-color: #bdc3c7;
-  color: #222222; }
+background-color: #ecf0f1;
+border-color: #bdc3c7;
+color: #222222; }
   button:hover, button:focus, .button:hover, .button:focus {
     background-color: #bdc3c7; }
   button:hover, button:focus, .button:hover, .button:focus {
