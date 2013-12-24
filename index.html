@@ -178,8 +178,8 @@ function codeAddress(){
         geocoder.geocode( { 'address': sAddress}, function(results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {
                                  map.setCenter(results[0].geometry.location);
-								 codeLatLng(results[0].geometry.location.mb, results[0].geometry.location.nb);
-                                 getResults(results[0].geometry.location.mb, results[0].geometry.location.nb);
+								 codeLatLng(results[0].geometry.location.ob, results[0].geometry.location.pb);
+                                 getResults(results[0].geometry.location.ob, results[0].geometry.location.pb);
                                  map.setZoom(14);
                                  var marker = new google.maps.Marker({map: map, scrollwheel: false, title: "You are here (more or less)", position: results[0].geometry.location
 });
@@ -207,8 +207,8 @@ var center = new google.maps.LatLng(loc.coords.latitude,loc.coords.longitude);
 //console.log(center);
 map.setCenter(center);
 var marker = new google.maps.Marker({map: map, position: center, scrollwheel: false, draggable: false, title: "You are here (more or less)"});
-codeLatLng(center.mb, center.nb);
-getResults(center.mb, center.nb);
+codeLatLng(center.ob, center.pb);
+getResults(center.ob, center.pb);
 }
 function show_map_error() {
 $("#geo-wrapper").html('Unable to determine your location.');
