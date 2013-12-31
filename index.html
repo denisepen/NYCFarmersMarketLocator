@@ -1,134 +1,129 @@
 <!DOCTYPE html>
-<!--[if IE 8]>                                  <html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-
 <head>
-        <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>Find a Farmers Market Near You in New York City</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	
+	<title>Find a Farmers Market Near You in New York City</title>
+	
+	<link rel="stylesheet" href="css/foundation.css">
+	
+	<script src="js/vendor/custom.modernizr.js"></script>
 
-  
-  <link rel="stylesheet" href="css/foundation.css">
-  
-
-  <script src="js/vendor/custom.modernizr.js"></script>
 <style>
-#geo-wrapper img { max-width:none; }
+#geo-wrapper img {
+	max-width:none; 
+	}
 
 .page-wrap {
-  min-height: 100%;
-  /* equal to footer height */
-  margin-bottom: -142px; 
-}
+	min-height: 100%;
+	/* equal to footer height */
+	margin-bottom: -142px;
+	}
+	
 .page-wrap:after {
-  content: "";
-  display: block;
-}
+	content: "";
+	display: block;
+	}
+	
 .footer, .page-wrap:after {
-  /* .push must be the same height as footer */
-  height: 142px; 
-}
+	/* .push must be the same height as footer */
+	height: 142px;
+	}
 
 @media all and (max-width: 980px) {
-      #fixit {
-        position:relative;
-      }
-   }
+	#fixit {
+		position:relative;
+		}
+	}
    
-   @media all and (min-width: 980px) {
-      #fixit {
-        position:fixed;
+@media all and (min-width: 980px) {
+	#fixit {
+		position:fixed;
 		max-width:553px;
-      }
-   }
-
+		}
+	}
 </style>
+
 </head>
+
 <body onload="initialize();">
-        <div class="row page-wrap">
-                <div class="large-12 columns">
-        <div class="row">
-                <div class="large-12 columns">
-                        <h1>Find a Farmers Market Near You in New York City</h1>
-                        <hr />
+
+	<div class="row page-wrap">
+		<div class="large-12 columns">
+			<div class="row">
+				<div class="large-12 columns">
+					<h1>Find a Farmers Market Near You in New York City</h1>
+					 <hr />
                 </div>
-        </div>
-        
-        
+			</div>
 
-  <div class="row">
-    <div class="large-7 columns">
-            <form onsubmit="codeAddress();return false">
-                <input type="text" id="inputTextAddress" placeholder="Address or Zip Code">
-                        </form>
-    </div>
-        <div class="large-1 columns">
-                <a href="#" onclick="codeAddress();return false" class="button prefix"><i class="foundicon-search"></i></a>
-    </div>
-        <div class="large-1 columns">
-                <p style="text-align:center; font-weight:bold;">OR</p>
-        </div>
-        <div class="large-3 columns">
-                <a href="#" onclick="lookup_location();return false" class="small button" style="width:100%;">Nearby</a>
-        </div>
-        </div>
+	<div class="row">
+		<div class="large-7 columns">
+			<form onsubmit="codeAddress();return false">
+				<input type="text" id="inputTextAddress" placeholder="Address or Zip Code">
+			</form>
+    	</div>
+		<div class="large-1 columns">
+			<a href="#" onclick="codeAddress();return false" class="button prefix"><i class="foundicon-search"></i></a>
+    	</div>
+		<div class="large-1 columns">
+			<p style="text-align:center; font-weight:bold;">OR</p>
+		</div>
+		<div class="large-3 columns">
+			<a href="#" onclick="lookup_location();return false" class="small button" style="width:100%;">Nearby</a>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="large-12 columns">
+			<div class="panel">
+				<h4>Farmers Markets near <span id="location"></span></h4>
+			</div>
+		</div>
+	</div>
 
-                        <!-- Grid Example -->
-                        <div class="row">
-                                <div class="large-12 columns">
-                                        <div class="panel">
-                                                <h4>Farmers Markets near <span id="location"></span></h4>
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="row">
-                                <div class="large-5 columns">
-                                        <!-- <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p><p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>Products: Products</p><p><a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p> -->
-                                        <div id="markets">
-										<div class="panel" >
-										<p>This is an alpha-level app, so far. To find a farmers market within 1 mile of a given location, type an address in the search bar or allow the browser to auto-detect your location when you click on the "Nearby" button.</p>
-										<p>Features I plan to add:<br/>
-										- Distance from current location: XX mi<br/>
-										- Products available<br/>
-										- Better website links<br/>
-										- Detect whether a market is open or closed at time of search<br/>
-										- Prioritize order of markets based on distance and open/closed<br/>
-										- local storage or cache</p>
-										</div>
-                                        </div>
-                                </div>
-                                <div class="large-7 columns" style="height:425px;">
-									<div id="fixit" style="width:100%; height:425px;">
-                                        <div id="geo-wrapper" style="height:425px; width:100%;" class="panel"></div>
-					
-									</div>
-
-                                </div>
-
-                        </div>
-                
-                
-                        <div class="row">
-                <div class="large-12 columns">
-&nbsp;		
-                </div>
-        </div>
-    </div>
-    </div>            
-        <div class="row footer">
-                <div class="large-12 columns">
-<hr/ >
-										<p>Please direct questions or comments to: <a style="color:#ffffff; text-decoration:underline;" href="mailto:mtaylor@megantaylor.org">mtaylor@megantaylor.org</a>.</p>
-										<p>This project was originally concieved as an app to find an open farmers market near a user's location. You can see the seed of the idea on my <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="http://www.megantaylor.org/2012/12/13/visualizing-farmers-markets-in-nyc/">blog</a>. I finally got a chance to start working on it while taking Thinkful's Front-end Web Development class in the fall of 2013.</p> 
-												<p>Farmers Market data from <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="https://data.ny.gov">State of New York Open Data</a>. Design and development by <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="http://www.megantaylor.org">Megan Taylor</a>.</p>			
-                </div>
-        </div>
-                                                                        	
-  <script>
-  document.write('<script src=' +
-  ('__proto__' in {} ? 'js/vendor/zepto' : 'js/vendor/jquery') +
-  '.js><\/script>')
-  </script>
+	<div class="row">
+		<div class="large-5 columns">
+			<div id="markets">
+            	<div class="panel">
+					<p>This is an alpha-level app, so far. To find a farmers market within 1 mile of a given location, type an address in the search bar or allow the browser to auto-detect your location when you click on the "Nearby" button.</p>
+					<p>Features I plan to add:</p>
+					<ul>
+						<li>Distance from current location: XX mi</li>
+						<li>Products available</li>
+						<li>Better website links</li>
+						<li>Detect whether a market is open or closed at time of search</li>
+						<li>Prioritize order of markets based on distance and open/closed</li>
+						<li>local storage or cache</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="large-7 columns" style="height:425px;">
+			<div id="fixit" style="width:100%; height:425px;">
+				<div id="geo-wrapper" style="height:425px; width:100%;" class="panel"></div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="large-12 columns">&nbsp;</div>
+	</div>
+</div>
+</div>
+	<div class="row footer">
+		<div class="large-12 columns">
+			<hr/ >
+            <p>Please direct questions or comments to: <a style="color:#ffffff; text-decoration:underline;" href="mailto:mtaylor@megantaylor.org">mtaylor@megantaylor.org</a>.</p>
+			<p>This project was originally concieved as an app to find an open farmers market near a user's location. You can see the seed of the idea on my <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="http://www.megantaylor.org/2012/12/13/visualizing-farmers-markets-in-nyc/">blog</a>. I finally got a chance to start working on it while taking Thinkful's Front-end Web Development class in the fall of 2013.</p>
+			<p>Farmers Market data from <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="https://data.ny.gov">State of New York Open Data</a>. Design and development by <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="http://www.megantaylor.org">Megan Taylor</a>.</p>                        
+		</div>
+	</div>
+                                                                                <script>
+document.write('<script src=' + ('__proto__' in {} ? 'js/vendor/zepto' : 'js/vendor/jquery') + '.js><\/script>')
+</script>
   
   <script src="js/foundation.min.js"></script>
   <!--
@@ -153,204 +148,248 @@
   <script>
     $(document).foundation();
   </script>
+  
     <script type="text/javascript"
  src="js/geoposition/geoPosition.js"></script>
+ 
     <script type="text/javascript"
 src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyAufQG3-_yBGqDKE7dTf53zpqkhUKC8tao&sensor=true"></script>
 
 <script>
+// Initializing Google Maps stuff
 google.maps.visualRefresh = true;
 var geocoder;
 var map;
 var infowindow;
 
 function initialize() {
-        geocoder = new google.maps.Geocoder();
-        var latlng = new google.maps.LatLng(40.6700, -73.9400);
-        var myOptions = {zoom:10,center:latlng, scrollwheel: false, MapTypeId:google.maps.MapTypeId.ROADMAP};
-        map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
-        }
-        
-function codeAddress(){
-        var myOptions = {scrollwheel: false, MapTypeId:google.maps.MapTypeId.ROADMAP};
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(40.6700, -73.9400);
+    var myOptions = {
+        zoom: 10,
+        center: latlng,
+        scrollwheel: false,
+        MapTypeId: google.maps.MapTypeId.ROADMAP
+    };
     map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
-        var sAddress = document.getElementById("inputTextAddress").value;
-        geocoder.geocode( { 'address': sAddress}, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                                 map.setCenter(results[0].geometry.location);
-								 codeLatLng(results[0].geometry.location.ob, results[0].geometry.location.pb);
-                                 getResults(results[0].geometry.location.ob, results[0].geometry.location.pb);
-                                 map.setZoom(14);
-                                 var marker = new google.maps.Marker({map: map, scrollwheel: false, title: "You are here (more or less)", position: results[0].geometry.location
-});
-} else {
-        alert("Geocode was not successful for the following reason: " + status);
-                        }
-        });                
 }
 
-function supports(bool, suffix) {
-var s = "Your browser ";
-if (bool) {
-s += "supports " + suffix + ".";
-} else {
-s += "does not support " + suffix + ". :(";
-}
-return s;
-}
-function lookup_location() {
-geoPosition.getCurrentPosition(show_map, show_map_error);
-}
-function show_map(loc) {
-map = new google.maps.Map(document.getElementById("geo-wrapper"), {zoom: 14, mapTypeControl:true, zoomControl: true, scrollwheel: false, mapTypeId: google.maps.MapTypeId.ROADMAP});
-var center = new google.maps.LatLng(loc.coords.latitude,loc.coords.longitude);
-//console.log(center);
-map.setCenter(center);
-var marker = new google.maps.Marker({map: map, position: center, scrollwheel: false, draggable: false, title: "You are here (more or less)"});
-codeLatLng(center.ob, center.pb);
-getResults(center.ob, center.pb);
-}
-function show_map_error() {
-$("#geo-wrapper").html('Unable to determine your location.');
-}
-$(function() {
-if (geoPosition.init()) {
- $("#geo-wrapper").html(supports(true, "geolocation"));
-} else {
-$("#geo-wrapper").html(supports(false, "geolocation"));
-}
-});
+// Grab address from input field, send to Google geocoder, set map to center on address, create marker
+function codeAddress() {
+//    var myOptions = {
+//        scrollwheel: false,
+//        MapTypeId: google.maps.MapTypeId.ROADMAP
+//    };
 
+//    map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
 
-function codeLatLng(lat, lng) {
-  var latlng = new google.maps.LatLng(lat, lng);
-  geocoder.geocode({'latLng': latlng}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-      if (results[1]) {
-        $("#location").text(results[1].formatted_address);
-      } else {
-        alert('No results found');
-      }
+    var sAddress = document.getElementById("inputTextAddress").value;
+
+    geocoder.geocode({
+        'address': sAddress
+    }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            codeLatLng(results[0].geometry.location.ob, results[0].geometry.location.pb);
+            getResults(results[0].geometry.location.ob, results[0].geometry.location.pb);
+            map.setZoom(14);
+            var marker = new google.maps.Marker({
+                map: map,
+                scrollwheel: false,
+                title: "You are here (more or less)",
+                position: results[0].geometry.location
+            });
+        } else {
+            alert("Geocode was not successful for the following reason: " + status);
+        }
+    });
+}
+
+//Browser support for geolocation messages
+$(function () {
+    if (geoPosition.init()) {
+        $("#geo-wrapper").html(supports(true, "geolocation"));
     } else {
-      alert('Geocoder failed due to: ' + status);
+        $("#geo-wrapper").html(supports(false, "geolocation"));
     }
-  });
+});
+function supports(bool, suffix) {
+    var s = "Your browser ";
+    if (bool) {
+        s += "supports " + suffix + ".";
+    } else {
+        s += "does not support " + suffix + ". :(";
+    }
+    return s;
 }
 
+//If user clicks "Nearby" button, try to find location via browser
+function lookup_location() {
+    geoPosition.getCurrentPosition(show_map, show_map_error);
+}
+
+//If geolocation fails
+function show_map_error() {
+    $("#geo-wrapper").html('Unable to determine your location.');
+}
+
+//If geolocation succeeds, set new map center, create marker for location, call codeLatLng function and getResults function
+function show_map(loc) {
+//    map = new google.maps.Map(document.getElementById("geo-wrapper"), {
+//        zoom: 14,
+//        mapTypeControl: true,
+//        zoomControl: true,
+//        scrollwheel: false,
+//        mapTypeId: google.maps.MapTypeId.ROADMAP
+//    });
+    var center = new google.maps.LatLng(loc.coords.latitude, loc.coords.longitude);
+    //console.log(center);
+    map.setCenter(center);
+    var marker = new google.maps.Marker({
+        map: map,
+        position: center,
+        scrollwheel: false,
+        draggable: false,
+        title: "You are here (more or less)"
+    });
+    codeLatLng(center.ob, center.pb);
+    getResults(center.ob, center.pb);
+}
+
+//Reverse geocoder to put user's location in top panel
+function codeLatLng(lat, lng) {
+    var latlng = new google.maps.LatLng(lat, lng);
+    geocoder.geocode({
+        'latLng': latlng
+    }, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            if (results[1]) {
+                $("#location").text(results[1].formatted_address);
+            } else {
+                alert('No results found');
+            }
+        } else {
+            alert('Geocoder failed due to: ' + status);
+        }
+    });
+}
+
+//Add a marker for each farmer's market near search location, change marker to green, create infowindow, run selectMarket function
 function addMarker(location, marketName, panelID) {
-	var marker = new google.maps.Marker({
-	map: map,
-	position: location,
-	scrollwheel: false,
-	icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-	title: marketName
-	});
-  	google.maps.event.addListener(marker, 'click', function() {
-	if (infowindow) infowindow.close();
-	infowindow = new google.maps.InfoWindow({
-    content: "<p style='margin:0px;padding:0px;'>" + marketName + "</p>"
-  	});
-  	$('.panel').css("background-color", "#F2F2F2");
-	infowindow.open(map, marker);  
-    selectMarket(panelID);
-  });
+    var marker = new google.maps.Marker({
+        map: map,
+        position: location,
+        scrollwheel: false,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+        title: marketName
+    });
+    google.maps.event.addListener(marker, 'click', function () {
+        if (infowindow) infowindow.close();
+        infowindow = new google.maps.InfoWindow({
+            content: "<p style='margin:0px;padding:0px;'>" + marketName + "</p>"
+        });
+        $('.panel').css("background-color", "#F2F2F2");
+        infowindow.open(map, marker);
+        selectMarket(panelID);
+    });
 }
 
+//highlight panel in left column correlating to marker and scroll map to panel. this needs work
 function selectMarket(panelID) {
-	//console.log('#'+ panelID + '');
-	$('#'+ panelID + '').css("background-color", "#C5E3BF");
-	//$('#'+ panelID + '').attr( 'name', 'foo' );
-	//$('html,body').animate({scrollTop: div[name='foo'].offset().top},'slow');
-	window.location = '#'+ panelID + '';
-	//$('#'+ panelID + '').attr( 'name', '' );
+    //console.log('#'+ panelID + '');
+    $('#' + panelID + '').css("background-color", "#C5E3BF");
+    //$('#'+ panelID + '').attr( 'name', 'foo' );
+    //$('html,body').animate({scrollTop: div[name='foo'].offset().top},'slow');
+    window.location = '#' + panelID + '';
+    //$('#'+ panelID + '').attr( 'name', '' );
 }
 
-function getResults(lat, lng){
- 
- var url = "http://data.ny.gov/resource/n6w2-gz88.json?$where=within_circle(location_points, " + lat + "," + lng + ", 1610)"
- 
- $.get( url, function( data ) {
- 	//console.log( data );
- 	$("#markets").empty();
- 	for(var i = 0; i < data.length; i++) {
- 		var current = data[i];
- 		//console.log(current);
-		if (current.market_link.url != "") {
-			var website = "<a target='_blank' href=" + current.market_link.url + ">Website</a>";
-		} else {
-			website = '';
-			}
-	    var panelID = current.market_name.replace(/\s+/g, '');
- 		var panel =  $('<div class="panel" id="' + panelID + '"><h5>' + current.market_name + '</h5> <p>' + current.location + '<br /> <a target="_blank" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a><br /> Open ' + current.operation_hours + "<br />" + current.operation_season + '<br /> ' + website + '</div>');
- 		$("#markets").append(panel);
- 		var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
- 		var newMarkerTitle = current.market_name;
- 		addMarker(newMarker, newMarkerTitle, panelID);
- 		//getUSDAResults(parseFloat(current.latitude), parseFloat(current.longitude));
- 		}
- 	if(data.length === 0) {
- 	var emptyPanel =  $('<div class="panel" id="noMarkets"><p>Oops! I couldn\'t find a farmers market within 1 mile of your location. This app only supports searches within New York City. Please try again!</p></div>');
- 		$("#markets").append(emptyPanel);
- 		}
- });
- 
- } 
-/* 
+//finally getting actual farmers market data from data.ny.gov
+function getResults(lat, lng) {
+    var url = "http://data.ny.gov/resource/n6w2-gz88.json?$where=within_circle(location_points, " + lat + "," + lng + ", 1610)";
+
+    $.get(url, function (data) {
+        //console.log( data );
+        $("#markets").empty(); //empty left column for new results
+        for (var i = 0; i < data.length; i++) {
+            var website = '';
+            var current = data[i];
+            //console.log(current);
+            if (current.market_link.url !== "") { 
+                website = "<a target='_blank' href=" + current.market_link.url + ">Website</a>"; //link to market website, if any
+            }
+            var panelID = current.market_name.replace(/\s+/g, ''); //create ID for panels for targeting with selectMarket function
+            var panel = $('<div class="panel" id="' + panelID + '"><h5>' + current.market_name + '</h5> <p>' + current.location + '<br /> <a target="_blank" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a><br /> Open ' + current.operation_hours + "<br />" + current.operation_season + '<br /> ' + website + '</div>');
+            $("#markets").append(panel);
+            var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
+            var newMarkerTitle = current.market_name;
+            addMarker(newMarker, newMarkerTitle, panelID); //create markers for farmers markets
+            //getUSDAResults(parseFloat(current.latitude), parseFloat(current.longitude));
+        }
+        if (data.length === 0) {
+            var emptyPanel = $('<div class="panel" id="noMarkets"><p>Oops! I couldn\'t find a farmers market within 1 mile of your location. This app only supports searches within New York City. Please try again!</p></div>');
+            $("#markets").append(emptyPanel);
+        }
+    });
+}
+/*
 function getUSDAResults(lat, lng) {
-    $.ajax({
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        // submit a get request to the restful service mktDetail.
-        url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat=" + lat + "&lng=" + lng,
-        dataType: 'jsonp',
-        success: function(data) {
-			searchResultsHandler(data);
-		},
-		error : function(err, req) {
-			console.log("Your browser broke!");
-		}    });
+$.ajax({
+type: "GET",
+contentType: "application/json; charset=utf-8",
+// submit a get request to the restful service mktDetail.
+url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat=" + lat + "&lng=" + lng,
+dataType: 'jsonp',
+success: function(data) {
+                        searchResultsHandler(data);
+                },
+                error : function(err, req) {
+                        console.log("Your browser broke!");
+                } });
 }
 //iterate through the JSON result object.
 function searchResultsHandler(searchresults) {
-    for (var key in searchresults) {
-        //console.log(key);
-        var results = searchresults[key];
-        for (var i = 0; i < results.length; i++) {
-            var result = results[i];
-            for (var key in result) {
-                //only do an alert on the first search result
-                if (i == 0) {
-                    console.log(result.id);
-                }
-            }
-        }
-    }
+for (var key in searchresults) {
+//console.log(key);
+var results = searchresults[key];
+for (var i = 0; i < results.length; i++) {
+var result = results[i];
+for (var key in result) {
+//only do an alert on the first search result
+if (i == 0) {
+console.log(result.id);
 }
-*/ 
+}
+}
+}
+}
+*/
 /* function getDetails(id) {
-     $.ajax({
-         type: "GET",
-         contentType: "application/json; charset=utf-8",
-         // submit a get request to the restful service mktDetail.
-         url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=" + id,
-         dataType: 'jsonp',
-         success: function(data) {
- 			detailResultsHandler(data, id);
- 		},
- 		error : function(err, req) {
- 			console.log("Your browser broke!");
- 		}    });
- }
- //iterate through the JSON result object.
- function detailResultsHandler(detailresults, id) {
-     for (var key in detailresults) {
-         //console.log(key);
-         var results = detailresults[key];
-         //console.log(results);
-     }
+$.ajax({
+type: "GET",
+contentType: "application/json; charset=utf-8",
+// submit a get request to the restful service mktDetail.
+url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=" + id,
+dataType: 'jsonp',
+success: function(data) {
+                        detailResultsHandler(data, id);
+                },
+                error : function(err, req) {
+                        console.log("Your browser broke!");
+                } });
+}
+//iterate through the JSON result object.
+function detailResultsHandler(detailresults, id) {
+for (var key in detailresults) {
+//console.log(key);
+var results = detailresults[key];
+//console.log(results);
+}
 */
 
 </script>
 
+<!-- <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p><p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>Products: Products</p><p><a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p> -->
+			
 </body>
 </html>
