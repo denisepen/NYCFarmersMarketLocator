@@ -1062,6 +1062,10 @@ a {
   a img {
     border: none; }
 
+a.footerLink {
+color:#ffffff; 
+text-decoration:underline;
+}
 /* Default paragraph styles */
 p {
   font-family: inherit;
@@ -4730,3 +4734,8 @@ a.th {
     max-width: 500px; }
   .f-dropdown.large {
     max-width: 800px; } 
+
+div.gm-style-iw p {margin:0px; padding: 0px;}
+div.large-1 p {text-align:center; font-weight:bold;}
+#geolocateMe {width:100%;}
+.highlight {background-color:#C5E3BF;}

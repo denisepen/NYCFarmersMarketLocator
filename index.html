@@ -12,6 +12,7 @@
 	<script src="js/vendor/custom.modernizr.js"></script>
 
 <style>
+/* Testing sticky map stuff, will move to CSS file once solved */
 #geo-wrapper img {
 	max-width:none; 
 	}
@@ -48,7 +49,7 @@
 
 </head>
 
-<body onload="initialize();">
+<body>
 
 	<div class="row page-wrap">
 		<div class="large-12 columns">
@@ -61,18 +62,26 @@
 
 	<div class="row">
 		<div class="large-7 columns">
-			<form onsubmit="codeAddress();return false">
+		<!-- 
+		Need to figure out how to submit with Enter key elegantly, tried 
+		$('#inputTextAddress').keydown(function(event){    
+    		if(event.keyCode==13){
+    			$('#searchAddress').trigger('click');
+    		}
+    	});
+		-->
+			<form onsubmit="$('#searchAddress').trigger('click');return false">
 				<input type="text" id="inputTextAddress" placeholder="Address or Zip Code">
 			</form>
     	</div>
 		<div class="large-1 columns">
-			<a href="#" onclick="codeAddress();return false" class="button prefix"><i class="foundicon-search"></i></a>
+			<a href="#" id="searchAddress" class="button prefix"><i class="foundicon-search"></i></a>
     	</div>
 		<div class="large-1 columns">
-			<p style="text-align:center; font-weight:bold;">OR</p>
+			<p>OR</p>
 		</div>
 		<div class="large-3 columns">
-			<a href="#" onclick="lookup_location();return false" class="small button" style="width:100%;">Nearby</a>
+			<a href="#" id="geolocateMe" class="small button">Nearby</a>
 		</div>
 	</div>
 	
@@ -116,9 +125,9 @@
 	<div class="row footer">
 		<div class="large-12 columns">
 			<hr/ >
-            <p>Please direct questions or comments to: <a style="color:#ffffff; text-decoration:underline;" href="mailto:mtaylor@megantaylor.org">mtaylor@megantaylor.org</a>.</p>
-			<p>This project was originally concieved as an app to find an open farmers market near a user's location. You can see the seed of the idea on my <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="http://www.megantaylor.org/2012/12/13/visualizing-farmers-markets-in-nyc/">blog</a>. I finally got a chance to start working on it while taking Thinkful's Front-end Web Development class in the fall of 2013.</p>
-			<p>Farmers Market data from <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="https://data.ny.gov">State of New York Open Data</a>. Design and development by <a target="_blank" style="color:#ffffff; text-decoration:underline;" href="http://www.megantaylor.org">Megan Taylor</a>.</p>                        
+            <p>Please direct questions or comments to: <a class="footerLink" href="mailto:mtaylor@megantaylor.org">mtaylor@megantaylor.org</a>.</p>
+			<p>This project was originally concieved as an app to find an open farmers market near a user's location. You can see the seed of the idea on my <a target="_blank" class="footerLink" href="http://www.megantaylor.org/2012/12/13/visualizing-farmers-markets-in-nyc/">blog</a>. I finally got a chance to start working on it while taking Thinkful's Front-end Web Development class in the fall of 2013.</p>
+			<p>Farmers Market data from <a target="_blank" class="footerLink" href="https://data.ny.gov">State of New York Open Data</a>. Design and development by <a target="_blank" class="footerLink" href="http://www.megantaylor.org">Megan Taylor</a>.</p>                        
 		</div>
 	</div>
                                                                                 <script>
@@ -126,24 +135,7 @@ document.write('<script src=' + ('__proto__' in {} ? 'js/vendor/zepto' : 'js/ven
 </script>
   
   <script src="js/foundation.min.js"></script>
-  <!--
-<script src="js/foundation/foundation.js"></script>
-<script src="js/foundation/foundation.alerts.js"></script>
-<script src="js/foundation/foundation.clearing.js"></script>
-<script src="js/foundation/foundation.cookie.js"></script>
-<script src="js/foundation/foundation.dropdown.js"></script>
-<script src="js/foundation/foundation.forms.js"></script>
-<script src="js/foundation/foundation.joyride.js"></script>
-<script src="js/foundation/foundation.magellan.js"></script>
-<script src="js/foundation/foundation.orbit.js"></script>
-<script src="js/foundation/foundation.reveal.js"></script>
-<script src="js/foundation/foundation.section.js"></script>
-<script src="js/foundation/foundation.tooltips.js"></script>
-<script src="js/foundation/foundation.topbar.js"></script>
-<script src="js/foundation/foundation.interchange.js"></script>
-<script src="js/foundation/foundation.placeholder.js"></script>
-<script src="js/foundation/foundation.abide.js"></script>
--->
+
   
   <script>
     $(document).foundation();
@@ -157,6 +149,9 @@ src="http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyAufQG3-_yBGqDKE7dTf53z
 
 <script>
 // Initializing Google Maps stuff
+$( document ).ready(function() {
+	initialize();
+});
 google.maps.visualRefresh = true;
 var geocoder;
 var map;
@@ -168,92 +163,81 @@ function initialize() {
     var myOptions = {
         zoom: 10,
         center: latlng,
-        scrollwheel: false,
+        scrollwheel: false, //this totally doesn't work?!
         MapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
+    map = new google.maps.Map($('#geo-wrapper')[0], myOptions);
 }
 
-// Grab address from input field, send to Google geocoder, set map to center on address, create marker
-function codeAddress() {
-//    var myOptions = {
-//        scrollwheel: false,
-//        MapTypeId: google.maps.MapTypeId.ROADMAP
-//    };
-
-//    map = new google.maps.Map(document.getElementById("geo-wrapper"), myOptions);
-
-    var sAddress = document.getElementById("inputTextAddress").value;
-
+// Grab address from input field, send to Google geocoder, set map to center on address, create location marker
+$("#searchAddress").click(function() {
+    var sAddress = $('#inputTextAddress').attr('value');
     geocoder.geocode({
-        'address': sAddress
+		'address': sAddress
     }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
+			map = new google.maps.Map($('#geo-wrapper')[0]); //clear map on new search
             map.setCenter(results[0].geometry.location);
-            codeLatLng(results[0].geometry.location.ob, results[0].geometry.location.pb);
-            getResults(results[0].geometry.location.ob, results[0].geometry.location.pb);
             map.setZoom(14);
-            var marker = new google.maps.Marker({
+            var marker = new google.maps.Marker({  //this is a red location marker
                 map: map,
-                scrollwheel: false,
-                title: "You are here (more or less)",
+				draggable: false,
+                title: 'You are here (more or less)',
                 position: results[0].geometry.location
             });
+			//is there a more elegant, DRY way to deal with the markers?
+			codeLatLng(results[0].geometry.location.ob, results[0].geometry.location.pb);
+            getResults(results[0].geometry.location.ob, results[0].geometry.location.pb);
+			//at some point, put these lat/lng points into variables
         } else {
-            alert("Geocode was not successful for the following reason: " + status);
+            alert('Geocode was not successful for the following reason: ' + status);
         }
     });
-}
+});
+
+//Need to figure out how to get Enter key to trigger the searchAddress click function
+
+//$('#inputTextAddress').keydown(function(event){    
+//    if(event.keyCode==13){
+//      $('#searchAddress').click();
+//    }
+//});
 
 //Browser support for geolocation messages
 $(function () {
-    if (geoPosition.init()) {
-        $("#geo-wrapper").html(supports(true, "geolocation"));
+   if (geoPosition.init()) {
+
     } else {
-        $("#geo-wrapper").html(supports(false, "geolocation"));
+        alert('Your browser does not support geolocation.');
     }
 });
-function supports(bool, suffix) {
-    var s = "Your browser ";
-    if (bool) {
-        s += "supports " + suffix + ".";
-    } else {
-        s += "does not support " + suffix + ". :(";
-    }
-    return s;
-}
 
 //If user clicks "Nearby" button, try to find location via browser
-function lookup_location() {
-    geoPosition.getCurrentPosition(show_map, show_map_error);
-}
+$('#geolocateMe').click(function() {
+    geoPosition.getCurrentPosition(showMap, showMapError);
+});
 
 //If geolocation fails
-function show_map_error() {
-    $("#geo-wrapper").html('Unable to determine your location.');
+function showMapError() {
+    alert('Unable to determine your location.');
 }
 
 //If geolocation succeeds, set new map center, create marker for location, call codeLatLng function and getResults function
-function show_map(loc) {
-//    map = new google.maps.Map(document.getElementById("geo-wrapper"), {
-//        zoom: 14,
-//        mapTypeControl: true,
-//        zoomControl: true,
-//        scrollwheel: false,
-//        mapTypeId: google.maps.MapTypeId.ROADMAP
-//    });
+function showMap(loc) {
+	map = new google.maps.Map($('#geo-wrapper')[0]);  //clear map on new search
     var center = new google.maps.LatLng(loc.coords.latitude, loc.coords.longitude);
-    //console.log(center);
     map.setCenter(center);
-    var marker = new google.maps.Marker({
+    map.setZoom(14);
+    var marker = new google.maps.Marker({ //this is a red location marker
         map: map,
         position: center,
-        scrollwheel: false,
         draggable: false,
-        title: "You are here (more or less)"
+        title: 'You are here (more or less)'
     });
+	//is there a more elegant, DRY way to deal with the markers?
     codeLatLng(center.ob, center.pb);
     getResults(center.ob, center.pb);
+	//at some point, put these lat/lng points into variables
 }
 
 //Reverse geocoder to put user's location in top panel
@@ -264,7 +248,7 @@ function codeLatLng(lat, lng) {
     }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             if (results[1]) {
-                $("#location").text(results[1].formatted_address);
+                $('#location').text(results[1].formatted_address);
             } else {
                 alert('No results found');
             }
@@ -274,52 +258,52 @@ function codeLatLng(lat, lng) {
     });
 }
 
-//Add a marker for each farmer's market near search location, change marker to green, create infowindow, run selectMarket function
+//Add a marker for each farmers market near search location, change marker to green, create infowindow, run selectMarket function
 function addMarker(location, marketName, panelID) {
-    var marker = new google.maps.Marker({
+    var marker = new google.maps.Marker({ //this is a green market icon
         map: map,
         position: location,
-        scrollwheel: false,
+		draggable: false,
         icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
         title: marketName
     });
+	//when you click on a marker, open infowindow closes, highlighted panel turns nuetral, then calls two functions to open new infowindow and highlight / scroll to matching panel
     google.maps.event.addListener(marker, 'click', function () {
         if (infowindow) infowindow.close();
         infowindow = new google.maps.InfoWindow({
-            content: "<p style='margin:0px;padding:0px;'>" + marketName + "</p>"
+            content: "<p>" + marketName + "</p>"
         });
-        $('.panel').css("background-color", "#F2F2F2");
+        $('.panel').removeClass("highlight");
         infowindow.open(map, marker);
         selectMarket(panelID);
     });
 }
 
-//highlight panel in left column correlating to marker and scroll map to panel. this needs work
+//highlight panel in left column correlating to marker and scroll map to panel. this needs work, still playing with stuff
 function selectMarket(panelID) {
     //console.log('#'+ panelID + '');
-    $('#' + panelID + '').css("background-color", "#C5E3BF");
     //$('#'+ panelID + '').attr( 'name', 'foo' );
     //$('html,body').animate({scrollTop: div[name='foo'].offset().top},'slow');
-    window.location = '#' + panelID + '';
     //$('#'+ panelID + '').attr( 'name', '' );
+	$('#' + panelID + '').addClass("highlight");
+	window.location = '#' + panelID + '';
 }
 
 //finally getting actual farmers market data from data.ny.gov
 function getResults(lat, lng) {
     var url = "http://data.ny.gov/resource/n6w2-gz88.json?$where=within_circle(location_points, " + lat + "," + lng + ", 1610)";
-
+//1610 is one mile in meters. at some point might have distance slider, will need to put distance into a variable
     $.get(url, function (data) {
-        //console.log( data );
         $("#markets").empty(); //empty left column for new results
         for (var i = 0; i < data.length; i++) {
             var website = '';
             var current = data[i];
-            //console.log(current);
             if (current.market_link.url !== "") { 
                 website = "<a target='_blank' href=" + current.market_link.url + ">Website</a>"; //link to market website, if any
             }
             var panelID = current.market_name.replace(/\s+/g, ''); //create ID for panels for targeting with selectMarket function
             var panel = $('<div class="panel" id="' + panelID + '"><h5>' + current.market_name + '</h5> <p>' + current.location + '<br /> <a target="_blank" href=' + encodeURI("http://maps.google.com?q=" + current.latitude + "," + current.longitude + "") + '>Map</a><br /> Open ' + current.operation_hours + "<br />" + current.operation_season + '<br /> ' + website + '</div>');
+			//dump market data into panel!
             $("#markets").append(panel);
             var newMarker = new google.maps.LatLng(current.latitude, current.longitude);
             var newMarkerTitle = current.market_name;
@@ -332,7 +316,11 @@ function getResults(lat, lng) {
         }
     });
 }
+
+
 /*
+USDA API STUFF
+
 function getUSDAResults(lat, lng) {
 $.ajax({
 type: "GET",
@@ -389,7 +377,10 @@ var results = detailresults[key];
 
 </script>
 
-<!-- <p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p><p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>Products: Products</p><p><a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p> -->
+<!--
+SOMEDAY CODE
+
+<p style="float:right; color:#C60F13;"><i class="foundicon-clock"></i> Closed Now</p><p style="float:right; color:#457A1A;"><i class="foundicon-clock"></i> Open Now</p><p style="clear:both;">Distance from current location: XX mi</p><p>Products: Products</p><p><a href="http://www.yelp.com/biz/staten-island-ferry-whitehall-terminal-greenmarket-ny">Yelp</a></p> -->
 			
 </body>
 </html>
