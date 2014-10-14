@@ -243,7 +243,7 @@ function show_map(loc) {
 //        mapTypeId: google.maps.MapTypeId.ROADMAP
 //    });
     var center = new google.maps.LatLng(loc.coords.latitude, loc.coords.longitude);
-    //console.log(center);
+    // console.log(loc.coords.latitude, loc.coords.longitude);
     map.setCenter(center);
     var marker = new google.maps.Marker({
         map: map,
@@ -252,8 +252,8 @@ function show_map(loc) {
         draggable: false,
         title: "You are here (more or less)"
     });
-    codeLatLng(center.ob, center.pb);
-    getResults(center.ob, center.pb);
+    codeLatLng(loc.coords.latitude, loc.coords.longitude);
+    getResults(loc.coords.latitude, loc.coords.longitude);
 }
 
 //Reverse geocoder to put user's location in top panel
