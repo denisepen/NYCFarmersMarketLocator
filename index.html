@@ -226,6 +226,7 @@ function showMapError() {
 function showMap(loc) {
 	map = new google.maps.Map($('#geo-wrapper')[0]);  //clear map on new search
     var center = new google.maps.LatLng(loc.coords.latitude, loc.coords.longitude);
+    // console.log(loc.coords.latitude, loc.coords.longitude);
     map.setCenter(center);
     map.setZoom(14);
     var marker = new google.maps.Marker({ //this is a red location marker
@@ -234,10 +235,10 @@ function showMap(loc) {
         draggable: false,
         title: 'You are here (more or less)'
     });
-	//is there a more elegant, DRY way to deal with the markers?
-    codeLatLng(center.ob, center.pb);
-    getResults(center.ob, center.pb);
-	//at some point, put these lat/lng points into variables
+
+    codeLatLng(loc.coords.latitude, loc.coords.longitude);
+    getResults(loc.coords.latitude, loc.coords.longitude);
+
 }
 
 //Reverse geocoder to put user's location in top panel
