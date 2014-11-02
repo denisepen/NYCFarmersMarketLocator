@@ -176,6 +176,8 @@ $("#searchAddress").click(function() {
 		'address': sAddress
     }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
+            var latitude = results[0].geometry.location.lat();
+            var longitude = results[0].geometry.location.lng();
 			map = new google.maps.Map($('#geo-wrapper')[0]); //clear map on new search
             map.setCenter(results[0].geometry.location);
             map.setZoom(14);
@@ -186,8 +188,8 @@ $("#searchAddress").click(function() {
                 position: results[0].geometry.location
             });
 			//is there a more elegant, DRY way to deal with the markers?
-			codeLatLng(results[0].geometry.location.ob, results[0].geometry.location.pb);
-            getResults(results[0].geometry.location.ob, results[0].geometry.location.pb);
+			codeLatLng(latitude, longitude);
+            getResults(latitude, longitude);
 			//at some point, put these lat/lng points into variables
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
@@ -226,7 +228,7 @@ function showMapError() {
 function showMap(loc) {
 	map = new google.maps.Map($('#geo-wrapper')[0]);  //clear map on new search
     var center = new google.maps.LatLng(loc.coords.latitude, loc.coords.longitude);
-    // console.log(loc.coords.latitude, loc.coords.longitude);
+    console.log(loc.coords.latitude, loc.coords.longitude);
     map.setCenter(center);
     map.setZoom(14);
     var marker = new google.maps.Marker({ //this is a red location marker
